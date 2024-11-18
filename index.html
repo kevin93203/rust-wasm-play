@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Fibonacci in WASM</h1>
+    <input type="number" id="input" placeholder="Enter n">
+    <button id="calculate">Calculate Fibonacci</button>
+    <p id="result"></p>
+
+    <script type="module">
+        import init, { fib, process_js_object, process_data, process_js_ary, MyData } from "./pkg/wasm_math.js";
+        async function run() {
+            await init();
+            document.getElementById('calculate').onclick = () => {
+                const n = parseInt(document.getElementById('input').value);
+                const resultString = fib(n); // Get the string result
+                document.getElementById('result').innerText = `Fibonacci(${n}) = ${resultString}`;
+            };
+            // let value = process_js_object({"key": "value"});
+            // console.log(value);
+            const jsonString = JSON.stringify({ key: "value", number: 42 });
+            const result = process_data(jsonString);
+            console.log(result);
+
+            // process_js_ary([new MyData("a", 1), new MyData("b", 2)]);
+        }
+        run();
+    </script>
+    <script>
+        // function fib_js(n, memo={}){
+        //     if(n in memo) return memo[n];
+        //     if(n <=1) return n;
+        //     memo[n] = fib_js(n-1, memo) + fib_js(n-2, memo);
+        //     return  memo[n];
+        // }
+
+        // const start = new Date().getTime(); // 獲取當前時間戳
+        // let n = fib_js(42);
+        // const end = new Date().getTime(); // 再次獲取時間戳
+        // console.log(`fib_js執行時間: ${end - start} 毫秒`);
+        // console.log(n);
+    </script>
+</body>
+
+</html>
